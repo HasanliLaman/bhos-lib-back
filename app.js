@@ -20,8 +20,10 @@ app.use(cors());
 
 // Routers
 const categoryRouter = require("./routers/categoryRouter");
+const bookRouter = require("./routers/bookRouter");
 
 app.use("/categories", categoryRouter);
+app.use("/books", bookRouter);
 
 // Catch nonexist routes
 app.use((req, res, next) => {
