@@ -19,6 +19,9 @@ if (process.env.NODE_ENV === "development") {
 app.use(cors());
 
 // Routers
+const categoryRouter = require("./routers/categoryRouter");
+
+app.use("/categories", categoryRouter);
 
 // Catch nonexist routes
 app.use((req, res, next) => {

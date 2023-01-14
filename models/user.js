@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
-// const bcrypt = require("bcrypt");
-// const crypto = require("crypto");
-// const { reset } = require("nodemon");
+const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+
+// TODO : Validate ID and Phone
 
 const userSchema = mongoose.Schema(
   {
@@ -53,7 +54,10 @@ const userSchema = mongoose.Schema(
       type: String,
       // validator
     },
-    workplace: {},
+    workplace: {
+      type: String,
+      default: "Baku Higher Oil School",
+    },
     password: {
       type: String,
       required: [true, "Password is required."],
@@ -78,6 +82,10 @@ const userSchema = mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    photo: {
+      type: String,
+      required: [true, "User photo is required."],
+    },
     resetToken: String,
     resetTokenExpires: Date,
   },
@@ -86,14 +94,14 @@ const userSchema = mongoose.Schema(
   }
 );
 
-// userSchema.pre("save", async function (next) {
-//   this.wasNew = this.isNew;
-//   if (!this.isModified("password")) return next();
-//   const newPassword = await bcrypt.hash(this.password, 12);
-//   this.password = newPassword;
-//   this.confirmPassword = undefined;
-//   next();
-// });
+userSchema.pre("save", async function (next) {
+  this.wasNew = this.isNew;
+  if (!this.isModified("password")) return next();
+  const newPassword = await bcrypt.hash(this.password, 12);
+  this.password = newPassword;
+  this.confirmPassword = undefined;
+  next();
+});
 
 // userSchema.post("save", async function (doc, next) {
 //   if (!this.wasNew) return next();
@@ -105,22 +113,22 @@ const userSchema = mongoose.Schema(
 //   next();
 // });
 
-// userSchema.methods.comparePassword = async (providedPassword, userPassword) => {
-//   return await bcrypt.compare(providedPassword, userPassword);
-// };
+userSchema.methods.comparePassword = async (providedPassword, userPassword) => {
+  return await bcrypt.compare(providedPassword, userPassword);
+};
 
-// userSchema.methods.createResetToken = function () {
-//   const resetToken = crypto.randomBytes(15).toString("hex");
-//   const hashedResetToken = crypto
-//     .createHash("sha256")
-//     .update(resetToken)
-//     .digest("hex");
+userSchema.methods.createResetToken = function () {
+  const resetToken = crypto.randomBytes(15).toString("hex");
+  const hashedResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
 
-//   this.resetToken = hashedResetToken;
-//   this.resetTokenExpires = Date.now() + 10 * 60 * 1000;
+  this.resetToken = hashedResetToken;
+  this.resetTokenExpires = Date.now() + 10 * 60 * 1000;
 
-//   return resetToken;
-// };
+  return resetToken;
+};
 
 const User = mongoose.model("user", userSchema);
 module.exports = User;
