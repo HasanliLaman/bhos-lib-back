@@ -3,15 +3,12 @@ const validator = require("validator");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 
-// TODO : Validate ID and Phone
-
 const userSchema = mongoose.Schema(
   {
     name: {
       type: String,
       required: [true, "Name is required."],
       minLength: 3,
-      trim: true,
     },
     surname: {
       type: String,
@@ -34,7 +31,7 @@ const userSchema = mongoose.Schema(
       required: [true, "Email is required."],
       validate: [validator.isEmail, "Please provide correct email."],
       match: [
-        /^[a-zA-Z0-9._%+-]+@+\.bhos.edu.az$/,
+        /^[a-zA-Z0-9._%+-]+@bhos.edu.az$/,
         "You can only register with BHOS email.",
       ],
       unique: true,
@@ -47,12 +44,18 @@ const userSchema = mongoose.Schema(
     phone: {
       required: [true, "Phone is required."],
       type: String,
-      // validator:
+      match: [
+        /(?:010|012|050|051|055|070|077|099)[0-9]{7}$/,
+        "Phone number format is not correct.",
+      ],
     },
     IDNumber: {
       required: [true, "Phone is required."],
       type: String,
-      // validator
+      match: [
+        /^(?:\AZE|AA|AZ|AR)[0-9]{8}$/,
+        "ID Number format is not correct.",
+      ],
     },
     workplace: {
       type: String,
@@ -62,7 +65,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Password is required."],
       match: [
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,15}$/,
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[.@$!%*?&])[A-Za-z\d.@$!%*?&]{5,15}$/,
         "Password must include minimum 5 and maximum 15 characters, at least one uppercase letter, one lowercase letter, one number and one special character.",
       ],
       select: false,
@@ -86,8 +89,19 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "User photo is required."],
     },
-    resetToken: String,
-    resetTokenExpires: Date,
+    resetToken: {
+      type: String,
+      select: false,
+    },
+    resetTokenExpires: {
+      type: Date,
+      select: false,
+    },
+    active: {
+      type: Boolean,
+      default: true,
+      select: false,
+    },
   },
   {
     timestamps: true,
@@ -95,26 +109,22 @@ const userSchema = mongoose.Schema(
 );
 
 userSchema.pre("save", async function (next) {
-  this.wasNew = this.isNew;
   if (!this.isModified("password")) return next();
-  const newPassword = await bcrypt.hash(this.password, 12);
-  this.password = newPassword;
+  this.password = await bcrypt.hash(this.password, 12);
   this.confirmPassword = undefined;
   next();
 });
 
-// userSchema.post("save", async function (doc, next) {
-//   if (!this.wasNew) return next();
+userSchema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } });
+  next();
+});
 
-//   await Cart.create({
-//     products: [],
-//     user: doc._id,
-//   });
-//   next();
-// });
-
-userSchema.methods.comparePassword = async (providedPassword, userPassword) => {
-  return await bcrypt.compare(providedPassword, userPassword);
+userSchema.methods.comparePassword = async function (
+  enteredPassword,
+  userPassword
+) {
+  return await bcrypt.compare(enteredPassword, userPassword);
 };
 
 userSchema.methods.createResetToken = function () {

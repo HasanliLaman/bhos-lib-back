@@ -4,9 +4,19 @@ const protectAuth = require("../middleware/protectAuth");
 const roleAccess = require("../middleware/roleAccess");
 
 router.get("/", bookController.getAllBooks);
-router.post("/", bookController.addBook);
+router.post("/", protectAuth, roleAccess("admin"), bookController.addBook);
 router.get("/:id", bookController.getOneBook);
-router.patch("/:id", bookController.updateBook);
-router.delete("/:id", bookController.deleteBook);
+router.patch(
+  "/:id",
+  protectAuth,
+  roleAccess("admin"),
+  bookController.updateBook
+);
+router.delete(
+  "/:id",
+  protectAuth,
+  roleAccess("admin"),
+  bookController.deleteBook
+);
 
 module.exports = router;
