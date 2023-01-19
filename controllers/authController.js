@@ -105,7 +105,21 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.resetTokenExpires = undefined;
   await user.save();
 
-  const token = createToken(user._id);
+  res.status(200).json({
+    status: "success",
+  });
+});
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select("+password");
+
+  if (!(await user.comparePassword(req.body.currentPassword, user.password))) {
+    return next(new GlobalError("Your current password is wrong.", 401));
+  }
+
+  user.password = req.body.password;
+  user.confirmPassword = req.body.confirmPassword;
+  await user.save();
 
   res.status(200).json({
     status: "success",

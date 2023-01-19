@@ -19,9 +19,3 @@ const protectAuth = catchAsync(async (req, res, next) => {
 });
 
 module.exports = protectAuth;
-
-// TODO
-// set email pugs
-// protect auth
-// add protect and role access
-// about me delete me and etc.

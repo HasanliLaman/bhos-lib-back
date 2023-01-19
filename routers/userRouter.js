@@ -9,8 +9,11 @@ router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 router.post("/forgetPassword", authController.forgetPassword);
 router.patch("/resetPassword/:token", authController.resetPassword);
+router.patch("/updateMyPassword", protectAuth, authController.updatePassword);
 
 // User
+router.get("/me", protectAuth, userController.getMe, userController.getOneUser);
+
 router.get("/", protectAuth, roleAccess("admin"), userController.getAllUsers);
 router.post("/", protectAuth, roleAccess("admin"), userController.addUser);
 router.get("/:id", protectAuth, roleAccess("admin"), userController.getOneUser);
