@@ -4,7 +4,7 @@ const protectAuth = require("../middleware/protectAuth");
 const roleAccess = require("../middleware/roleAccess");
 
 router.get("/", bookController.getAllBooks);
-router.post("/", protectAuth, roleAccess("admin"), bookController.addBook);
+router.post("/", bookController.addBook);
 router.get("/:id", bookController.getOneBook);
 router.patch(
   "/:id",

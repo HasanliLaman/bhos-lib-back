@@ -18,6 +18,12 @@ const bookSchema = mongoose.Schema(
         },
       ],
       required: [true, "Book category array is required."],
+      validate: {
+        validator: function (val) {
+          return val.length <= 3;
+        },
+        message: "You can add up to 3 categories.",
+      },
     },
     description: {
       type: String,

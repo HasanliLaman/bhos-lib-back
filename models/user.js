@@ -97,11 +97,6 @@ const userSchema = mongoose.Schema(
       type: Date,
       select: false,
     },
-    active: {
-      type: Boolean,
-      default: true,
-      select: false,
-    },
   },
   {
     timestamps: true,
