@@ -8,12 +8,11 @@ exports.getAllUploads = catchAsync(async (req, res, next) => {
   let query;
   if (req.params.userId)
     query = new GlobalFilter(
-      Upload.find({ user: req.params.userId }),
+      Upload.find({ userId: req.params.userId }),
       req.query
     );
   else query = new GlobalFilter(Upload.find(), req.query);
 
-  console.log(req.params.userId);
   query.filter().sort().fields().paginate();
   const doc = await query.query;
 

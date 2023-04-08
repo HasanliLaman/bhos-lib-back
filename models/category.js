@@ -7,6 +7,7 @@ const categorySchema = mongoose.Schema(
       type: String,
       required: [true, "Category name is required."],
     },
+    image: String,
     slug: String,
   },
   { timestamps: true }

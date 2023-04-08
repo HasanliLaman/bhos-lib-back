@@ -2,11 +2,15 @@ const router = require("express").Router();
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 const uploadRouter = require("../routers/uploadRouter");
+const cartRouter = require("../routers/cartRouters");
 const protectAuth = require("../middleware/protectAuth");
 const roleAccess = require("../middleware/roleAccess");
 
 // Upload
 router.use("/:userId/uploads", uploadRouter);
+
+// Cart
+router.use("/:userId/carts", cartRouter);
 
 // Auth
 router.post("/signup", authController.signup);

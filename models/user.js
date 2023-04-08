@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+const Cart = require("./cart");
 
 const userSchema = mongoose.Schema(
   {
@@ -104,9 +105,20 @@ const userSchema = mongoose.Schema(
 );
 
 userSchema.pre("save", async function (next) {
+  this.wasNew = this.isNew;
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 12);
   this.confirmPassword = undefined;
+  next();
+});
+
+userSchema.post("save", async function (doc, next) {
+  if (!this.wasNew) return next();
+
+  await Cart.create({
+    books: [],
+    userId: doc._id,
+  });
   next();
 });
 

@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 
 const uploadSchema = mongoose.Schema(
   {
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
-      required: [true, "User id is required."],
+      required: [true, "User ID is required."],
     },
     pdf: {
       type: String,
