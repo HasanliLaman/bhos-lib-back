@@ -14,7 +14,6 @@ const cartSchema = mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "book",
           required: [true, "Book ID is required."],
-          //   unique: true,
         },
         status: {
           type: String,

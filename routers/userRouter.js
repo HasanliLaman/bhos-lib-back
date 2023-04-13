@@ -1,10 +1,13 @@
 const router = require("express").Router();
+const multer = require("multer");
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 const uploadRouter = require("../routers/uploadRouter");
 const cartRouter = require("../routers/cartRouters");
 const protectAuth = require("../middleware/protectAuth");
 const roleAccess = require("../middleware/roleAccess");
+
+const upload = multer({ storage: multer.diskStorage({}) });
 
 // Upload
 router.use("/:userId/uploads", uploadRouter);
@@ -13,7 +16,7 @@ router.use("/:userId/uploads", uploadRouter);
 router.use("/:userId/carts", cartRouter);
 
 // Auth
-router.post("/signup", authController.signup);
+router.post("/signup", upload.single("photo"), authController.signup);
 router.post("/login", authController.login);
 router.post("/forgetPassword", authController.forgetPassword);
 router.patch("/resetPassword/:token", authController.resetPassword);

@@ -10,20 +10,10 @@ const bookSchema = mongoose.Schema(
       type: String,
       required: [true, "Book author is required."],
     },
-    categories: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "category",
-        },
-      ],
-      required: [true, "Book category array is required."],
-      validate: {
-        validator: function (val) {
-          return val.length <= 3;
-        },
-        message: "You can add up to 3 categories.",
-      },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "category",
+      required: [true, "Book category is required."],
     },
     description: {
       type: String,
@@ -51,7 +41,7 @@ const bookSchema = mongoose.Schema(
 
 bookSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "categories",
+    path: "category",
     select: "slug name",
   });
   next();
@@ -59,7 +49,7 @@ bookSchema.pre(/^find/, function (next) {
 
 bookSchema.pre("save", function (next) {
   this.populate({
-    path: "categories",
+    path: "category",
     select: "slug name",
   });
   next();

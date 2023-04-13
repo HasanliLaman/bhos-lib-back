@@ -1,9 +1,10 @@
+const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user.js");
 const catchAsync = require("../utils/catchAsync");
 const GlobalError = require("../error/GlobalError");
-const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/email");
-const crypto = require("crypto");
+const cloudinary = require("../utils/cloudinary");
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.SECRET_KEY, {
@@ -24,8 +25,13 @@ exports.signup = catchAsync(async (req, res, next) => {
     workplace: req.body.workplace,
     password: req.body.password,
     confirmPassword: req.body.confirmPassword,
-    photo: req.body.photo,
+    photo: "no",
   };
+
+  if (req.file) {
+    const img = await cloudinary.v2.uploader.upload(req.file.path);
+    userDetails.photo = img.url;
+  }
 
   const user = await User.create(userDetails);
   user.password = undefined;

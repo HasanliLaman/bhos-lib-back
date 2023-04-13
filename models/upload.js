@@ -15,20 +15,10 @@ const uploadSchema = mongoose.Schema(
       type: String,
       required: [true, "Document name is required."],
     },
-    categories: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "category",
-        },
-      ],
-      required: [true, "Upload category array is required."],
-      validate: {
-        validator: function (val) {
-          return val.length <= 3;
-        },
-        message: "You can add up to 3 categories.",
-      },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "category",
+      required: [true, "Upload category is required."],
     },
   },
   { timestamps: true }
@@ -36,7 +26,7 @@ const uploadSchema = mongoose.Schema(
 
 uploadSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "categories user",
+    path: "category user",
     select: "slug name surname email photo",
   });
   next();
@@ -44,7 +34,7 @@ uploadSchema.pre(/^find/, function (next) {
 
 uploadSchema.pre("save", function (next) {
   this.populate({
-    path: "categories user",
+    path: "category user",
     select: "slug name surname email photo",
   });
   next();
