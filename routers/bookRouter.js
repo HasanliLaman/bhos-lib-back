@@ -7,6 +7,7 @@ const roleAccess = require("../middleware/roleAccess");
 const upload = multer({ storage: multer.diskStorage({}) });
 
 router.get("/", bookController.getAllBooks);
+router.get("/search", bookController.searchBook);
 router.post(
   "/",
   protectAuth,

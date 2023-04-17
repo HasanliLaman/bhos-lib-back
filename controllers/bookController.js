@@ -49,4 +49,18 @@ exports.updateBook = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.searchBook = catchAsync(async (req, res, next) => {
+  const doc = await Book.find({
+    title: { $regex: req.query.title, $options: "i" },
+  });
+
+  res.status(200).json({
+    status: "success",
+    length: doc.length,
+    data: {
+      doc,
+    },
+  });
+});
+
 exports.deleteBook = factory.deleteOne(Book);
