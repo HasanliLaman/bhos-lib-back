@@ -4,37 +4,25 @@ const GlobalFilter = require("../utils/GlobalFilter.js");
 const GlobalError = require("../error/GlobalError");
 const catchAsync = require("../utils/catchAsync");
 
-exports.getAllCarts = catchAsync(async (req, res, next) => {
-  if (
-    req.user._id.toString() !== req.params.userId &&
-    req.user.role !== "admin"
-  )
-    return next(new GlobalError("Access denied.", 401));
-
-  let query;
-  if (req.params.userId)
-    query = new GlobalFilter(
-      Cart.find({ userId: req.params.userId }),
-      req.query
-    );
-  else query = new GlobalFilter(Cart.find(), req.query);
-
-  query.filter().sort().fields().paginate();
-  const carts = await query.query;
-
-  res.status(200).json({
-    status: "success",
-    length: carts.length,
-    data: {
-      carts,
-    },
-  });
-});
-
+exports.getAllCarts = factory.getAll(Cart);
 exports.getOneCart = factory.getOne(Cart);
 exports.updateCart = factory.updateOne(Cart);
 exports.createCart = factory.createOne(Cart);
 exports.deleteCart = factory.deleteOne(Cart);
+
+exports.getMyCart = catchAsync(async (req, res, next) => {
+  const userId = req.user._id;
+  const doc = await Cart.findOne({ userId });
+
+  if (!doc) return next(new GlobalError("Invalid ID!", 404));
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      doc,
+    },
+  });
+});
 
 // Add to cart
 // User sends book request

@@ -17,8 +17,12 @@ const cartSchema = mongoose.Schema(
         },
         status: {
           type: String,
-          enum: ["Returned", "In Use", "Requested"],
+          enum: ["returned", "in-use", "requested"],
           required: [true, "Book status is required"],
+        },
+        date: {
+          type: Date,
+          required: [true, "Book date is required"],
         },
       },
     ],

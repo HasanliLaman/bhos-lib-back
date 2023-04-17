@@ -12,9 +12,6 @@ const upload = multer({ storage: multer.diskStorage({}) });
 // Upload
 router.use("/:userId/uploads", uploadRouter);
 
-// Cart
-router.use("/:userId/carts", cartRouter);
-
 // Auth
 router.post("/signup", upload.single("photo"), authController.signup);
 router.post("/login", authController.login);
