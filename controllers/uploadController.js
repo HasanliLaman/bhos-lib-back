@@ -32,7 +32,7 @@ exports.addUpload = catchAsync(async (req, res, next) => {
   )
     return next(new GlobalError("Access denied.", 401));
 
-  req.body.user = req.user._id;
+  req.body.userId = req.user._id;
   const doc = await Upload.create(req.body);
 
   res.status(201).json({

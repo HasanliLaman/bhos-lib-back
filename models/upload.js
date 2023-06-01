@@ -26,7 +26,7 @@ const uploadSchema = mongoose.Schema(
 
 uploadSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "category user",
+    path: "category userId",
     select: "slug name surname email photo",
   });
   next();
@@ -34,7 +34,7 @@ uploadSchema.pre(/^find/, function (next) {
 
 uploadSchema.pre("save", function (next) {
   this.populate({
-    path: "category user",
+    path: "category userId",
     select: "slug name surname email photo",
   });
   next();
