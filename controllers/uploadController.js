@@ -16,8 +16,9 @@ exports.getAllUploads = catchAsync(async (req, res, next) => {
   query.filter().sort().fields().paginate();
   const doc = await query.query;
 
-  res.header("Access-Control-Expose-Headers", `x-total-count`);
-  res.header("x-total-count", `${doc.length}`);
+  res.header("X-Total-Count", `${doc.length}`);
+  res.header("Access-Control-Expose-Headers", `X-Total-Count`);
+  res.header("Access-Control-Allow-Headers", `X-Total-Count`);
 
   res.status(200).json({
     status: "success",
