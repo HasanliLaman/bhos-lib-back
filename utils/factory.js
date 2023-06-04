@@ -8,6 +8,7 @@ exports.getAll = (Model) =>
     query.filter().sort().fields().paginate();
     const doc = await query.query;
 
+    res.header("Access-Control-Expose-Headers", `Content-Range`);
     res.header(
       "Content-Range",
       `${Model.collection.collectionName} 0-${doc.length}/${doc.length}`
