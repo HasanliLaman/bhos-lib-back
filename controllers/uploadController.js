@@ -21,10 +21,8 @@ exports.getAllUploads = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    length: doc.length,
-    data: {
-      doc,
-    },
+    total: doc.length,
+    data: doc,
   });
 });
 
