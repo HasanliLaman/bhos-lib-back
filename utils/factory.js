@@ -9,6 +9,7 @@ exports.getAll = (Model) =>
     const doc = await query.query;
 
     res.header("Access-Control-Expose-Headers", `Content-Range`);
+    res.header("x-total-count", `${doc.length}`);
     res.header(
       "Content-Range",
       `${Model.collection.collectionName} 0-${doc.length}/${doc.length}`
