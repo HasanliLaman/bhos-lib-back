@@ -8,12 +8,8 @@ exports.getAll = (Model) =>
     query.filter().sort().fields().paginate();
     const doc = await query.query;
 
-    res.header("Access-Control-Expose-Headers", `Content-Range`);
+    res.header("Access-Control-Expose-Headers", `x-total-count`);
     res.header("x-total-count", `${doc.length}`);
-    res.header(
-      "Content-Range",
-      `${Model.collection.collectionName} 0-${doc.length}/${doc.length}`
-    );
 
     res.status(200).json({
       status: "success",
