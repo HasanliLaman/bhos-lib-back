@@ -10,7 +10,7 @@ exports.getAll = (Model) =>
 
     res.header(
       "Content-Range",
-      `${Model.collection.collectionName}s 0-${doc.length}/${doc.length}`
+      `${Model.collection.collectionName} 0-${doc.length}/${doc.length}`
     );
 
     res.status(200).json({
