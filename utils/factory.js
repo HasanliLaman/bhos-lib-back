@@ -16,8 +16,10 @@ exports.getAll = (Model) =>
 
     res.status(200).json({
       status: "success",
-      total: doc.length,
-      data: doc,
+      length: doc.length,
+      data: {
+        doc,
+      },
     });
   });
 
