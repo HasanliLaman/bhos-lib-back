@@ -23,16 +23,3 @@ exports.getMyCart = catchAsync(async (req, res, next) => {
     },
   });
 });
-
-// Add to cart
-// User sends book request
-// Book labeled as "Waiting" on the cart
-// Admin accepts the request
-// Book labeled as "In Use"
-// User sends return request
-// Book labeled as "Waiting"
-// Admin accepts the request
-// Book labeled as "Retured"
-
-// Requests can be 2 types: use and return
-// Request: userID, bookID, type, status

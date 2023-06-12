@@ -24,12 +24,14 @@ const bookRouter = require("./routers/bookRouter");
 const userRouter = require("./routers/userRouter");
 const uploadRouter = require("./routers/uploadRouter");
 const cartRouter = require("./routers/cartRouters");
+const requestRouter = require("./routers/requestRouter");
 
 app.use("/categories", categoryRouter);
 app.use("/books", bookRouter);
 app.use("/users", userRouter);
 app.use("/uploads", uploadRouter);
 app.use("/carts", cartRouter);
+app.use("/requests", requestRouter);
 
 // Catch nonexist routes
 app.use((req, res, next) => {

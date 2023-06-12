@@ -8,10 +8,6 @@ exports.getAll = (Model) =>
     query.filter().sort().fields().paginate();
     const doc = await query.query;
 
-    res.header("X-Total-Count", `${doc.length}`);
-    res.header("Access-Control-Expose-Headers", `X-Total-Count`);
-    res.header("Access-Control-Allow-Headers", `X-Total-Count`);
-
     res.status(200).json({
       status: "success",
       length: doc.length,
